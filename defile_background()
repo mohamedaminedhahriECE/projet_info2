@@ -1,0 +1,42 @@
+#include <allegro.h>
+
+int main() {
+    allegro_init();
+    install_keyboard();
+
+    int screen_width = 640;
+    int screen_height = 480;
+    set_color_depth(32);
+    set_gfx_mode(GFX_AUTODETECT_WINDOWED, screen_width, screen_height, 0, 0);
+
+    BITMAP *background = load_bitmap("Blueback.bmp", NULL); //METTEZ VOTRE CHEMIN D'accés de l'image ici (si c'est dans le dossier de l'executable mettez que nom et l'extention du fichier)
+    if (!background) {
+        allegro_message("Erreur : impossible de charger background.bmp");
+        return -1;
+    }
+
+    int bg_width = background->w;
+    int bg_height = background->h;
+
+    int scroll_x = 0;
+    int scroll_speed = 2;
+
+    while (!key[KEY_ESC]) {
+        clear_to_color(screen, makecol(0, 0, 0));
+
+        draw_sprite(screen, background, scroll_x, 0);
+        draw_sprite(screen, background, scroll_x + bg_width, 0);
+
+        scroll_x -= scroll_speed;
+        if (scroll_x <= -bg_width) {
+            scroll_x = 0;
+        }
+
+        vsync();
+        rest(10);
+    }
+
+    destroy_bitmap(background);
+    return 0;
+}
+END_OF_MAIN()
